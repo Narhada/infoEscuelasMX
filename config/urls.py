@@ -19,5 +19,5 @@ from django.urls import path, include
 
 urlpatterns = [
     path("plugin/", include("plugin.urls")),
-    path("xrayflares/", include("xrayflares.urls")),
+    path("SchoolSearch/", include("SchoolSearch.urls")),
 ]
