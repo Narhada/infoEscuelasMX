@@ -1,10 +1,14 @@
 from django.shortcuts import render
+from .forms import EstadoNivelForm
 
-# Create your views here.
-from django.shortcuts import render
-from django.http import HttpResponse
-
-# Create your views here.
-
-def index(request):
-        return HttpResponse("Hello, world. You're at the polls index.")
+def seleccion_view(request):
+    if request.method == "POST":
+        form = EstadoNivelForm(request.POST)
+        if form.is_valid():
+            estado = form.cleaned_data["estado"]
+            nivel = form.cleaned_data["nivel_educativo"]
+            # Aquí procesas los datos (guardar, mostrar resumen, etc.)
+            return render(request, "SchoolSearch/resumen.html", {"estado": estado, "nivel": nivel})
+    else:
+        form = EstadoNivelForm()
+    return render(request, "SchoolSearch/formulario.html", {"form": form})
