@@ -1,25 +1,43 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resumen</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet/dist/leaflet.css"
+    >
+
+    <link rel="stylesheet"
+          href="{% static 'SchoolSearch/css/mapa.css' %}">
+
 </head>
+
 <body>
 
-    <h1>Resumen de búsqueda</h1>
+    <div class="contenedor">
 
-    <p>
-        <strong>Estado:</strong>
-        {{ estado }}
-    </p>
+        <div class="contenido">
 
-    <p>
-        <strong>Nivel educativo:</strong>
-        {{ nivel }}
-    </p>
+            <h1>Información escuela</h1>
 
-    <a href="/">
-        Volver
-    </a>
+            <p>Resultados...</p>
+
+        </div>
+
+        <div class="mapa-contenedor">
+            <div id="map"></div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script src="{% static 'SchoolSearch/js/mapa.js' %}"></script>
 
 </body>
 </html>

@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa Escuelas</title>
+
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet/dist/leaflet.css"
+    />
+
+    <link rel="stylesheet" href="{% static 'css/mapa.css' %}">
+</head>
+<body>
+
+    <input type="text" id="buscar">
+    <button onclick="buscarEscuela()">Buscar</button>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script src="{% static 'js/mapa.js' %}"></script>
+
+</body>
+</html>

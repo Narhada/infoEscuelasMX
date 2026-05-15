@@ -1,0 +1,22 @@
+body{
+    margin:0;
+}
+
+.contenedor{
+    display:flex;
+    height:100vh;
+}
+
+.contenido{
+    width:66.66%;
+    padding:40;
+}
+
+.mapa-contenedor{
+    width:60%;
+}
+
+#map{
+    height:100%;
+    width:100%;
+}
