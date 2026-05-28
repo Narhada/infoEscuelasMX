@@ -25,7 +25,18 @@
 
             <h1>Información escuela</h1>
 
-            <p>Resultados...</p>
+            <h2>Escuelas más cercanas</h2>
+
+            {% for escuela in escuelas %}
+
+            <div>
+                <h3>{{ escuela.nombre }}</h3>
+                <p>{{ escuela.distancia }} km</p>
+            </div>
+
+            {% endfor %}
+
+            
 
         </div>
 

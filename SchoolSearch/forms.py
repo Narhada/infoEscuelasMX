@@ -4,7 +4,7 @@ NIVELES_EDUCATIVOS = [
     ("preescolar", "Preescolar"),
     ("primaria", "Primaria"),
     ("secundaria", "Secundaria"),
-    ("media_superior", "Media superior"),
+    
 ]
 
 class EstadoNivelForm(forms.Form):

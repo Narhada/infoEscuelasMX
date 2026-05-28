@@ -308,6 +308,9 @@
         <form method="POST" novalidate>
             {% csrf_token %}
 
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lon" id="lon">
+
             <!-- form.as_p se muestra con diseño mejorado gracias a los estilos CSS -->
             {{ form.as_p }}
 
@@ -382,6 +385,39 @@
             firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     })();
+</script>
+<script>
+
+const boton = document.getElementById("searchButton")
+
+// desactivar botón inicialmente
+boton.disabled = true
+
+navigator.geolocation.getCurrentPosition(
+
+    (position) => {
+
+        const lat = position.coords.latitude
+        const lon = position.coords.longitude
+
+        console.log(lat, lon)
+
+        document.getElementById("lat").value = lat
+        document.getElementById("lon").value = lon
+
+        // activar botón cuando ya hay ubicación
+        boton.disabled = false
+    },
+
+    (error) => {
+
+        console.log(error)
+
+        alert("Debes permitir ubicación para continuar")
+    }
+
+)
+
 </script>
 </body>
 </html>

@@ -219,3 +219,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+data/escuelas_mexico.json
+data/datos_categoria_ESCUELAS.csv
