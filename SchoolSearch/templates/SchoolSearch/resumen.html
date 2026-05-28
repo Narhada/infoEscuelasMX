@@ -3,33 +3,204 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+
+    <title>Escuelas Cercanas</title>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-    <link rel="stylesheet" href="{% static 'SchoolSearch/css/mapa.css' %}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins', sans-serif;
+        }
+
+        body{
+            background:#f1f5f9;
+            min-height:100vh;
+        }
+
+        .navbar{
+            width:100%;
+            background:linear-gradient(135deg,#1e3a8a,#2563eb);
+            padding:20px 40px;
+            color:white;
+            box-shadow:0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .navbar h1{
+            font-size:1.8rem;
+        }
+
+        .contenedor{
+            display:flex;
+            height:calc(100vh - 85px);
+        }
+
+        /* PANEL IZQUIERDO */
+
+        .contenido{
+            width:35%;
+            background:white;
+            padding:30px;
+            overflow-y:auto;
+            box-shadow:4px 0 15px rgba(0,0,0,0.08);
+        }
+
+        .contenido h2{
+            color:#1e3a8a;
+            margin-bottom:25px;
+            font-size:2rem;
+        }
+
+        .descripcion{
+            color:#64748b;
+            margin-bottom:25px;
+        }
+
+        .card{
+            background:#f8fafc;
+            border-radius:18px;
+            padding:20px;
+            margin-bottom:18px;
+            transition:0.3s;
+            border-left:6px solid #2563eb;
+            box-shadow:0 5px 12px rgba(0,0,0,0.05);
+        }
+
+        .card:hover{
+            transform:translateY(-4px);
+            box-shadow:0 10px 20px rgba(0,0,0,0.10);
+        }
+
+        .card h3{
+            color:#0f172a;
+            margin-bottom:10px;
+            font-size:1.2rem;
+        }
+
+        .distancia{
+            display:inline-block;
+            background:#dbeafe;
+            color:#1d4ed8;
+            padding:6px 12px;
+            border-radius:30px;
+            font-size:0.9rem;
+            font-weight:600;
+        }
+
+        /* MAPA */
+
+        .mapa-contenedor{
+            width:65%;
+            position:relative;
+        }
+
+        #map{
+            width:100%;
+            height:100%;
+        }
+
+        /* BOTON */
+
+        .btn-regresar{
+            display:inline-block;
+            margin-top:20px;
+            padding:12px 20px;
+            background:#2563eb;
+            color:white;
+            text-decoration:none;
+            border-radius:12px;
+            transition:0.3s;
+            font-weight:600;
+        }
+
+        .btn-regresar:hover{
+            background:#1d4ed8;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:900px){
+
+            .contenedor{
+                flex-direction:column;
+            }
+
+            .contenido{
+                width:100%;
+                height:45%;
+            }
+
+            .mapa-contenedor{
+                width:100%;
+                height:55%;
+            }
+        }
+
+    </style>
 </head>
+
 <body>
-    <div class="contenedor">
-    	<div class="mapa-contenedor">
-		
-        	<!-- MAPA -->
-        	<div id="map"></div>
-	</div>
 
-        	<!-- TABLA -->
-        	<div class="contenido">
-            	<h1>Escuelas más cercanas</h1>
-            		{% for escuela in escuelas %}
-            	<div>
-                	<h3>{{ escuela.nombre }}</h3>
-                	<p>{{ escuela.distancia }} km</p>
-            	</div>
-            	{% endfor %}
-        	</div>
+    <!-- NAVBAR -->
 
-    	
+    <div class="navbar">
+        <h1>Escuelas Cercanas</h1>
     </div>
 
+    <!-- CONTENIDO -->
+
+    <div class="contenedor">
+
+        <!-- PANEL -->
+
+        <div class="contenido">
+
+            <h2>Escuelas más cercanas</h2>
+
+            <p class="descripcion">
+                Estas son las escuelas encontradas cerca de tu ubicación.
+            </p>
+
+            {% for escuela in escuelas %}
+
+            <div class="card">
+
+                <h3>{{ escuela.nombre }}</h3>
+
+                <span class="distancia">
+                    {{ escuela.distancia }} km
+                </span>
+
+            </div>
+
+            {% endfor %}
+
+            <a href="/" class="btn-regresar">
+                Volver al inicio
+            </a>
+
+        </div>
+
+        <!-- MAPA -->
+
+        <div class="mapa-contenedor">
+            <div id="map"></div>
+        </div>
+
+    </div>
+
+    <!-- LEAFLET -->
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <script>
+
         const escuelas = {{ escuelas|safe }};
 
         const map = L.map('map').setView(
@@ -40,25 +211,29 @@
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
 
-        
         escuelas.forEach(function(escuela) {
+
             L.marker([escuela.lat, escuela.lon])
                 .addTo(map)
                 .bindPopup(
                     '<b>' + escuela.nombre + '</b><br>' +
                     escuela.distancia + ' km'
                 );
+
         });
+
         const latUsuario = {{ lat_usuario }};
         const lonUsuario = {{ lon_usuario }};
 
         L.circleMarker([latUsuario, lonUsuario], {
             radius: 10,
-            color: '#0066ff',
-            fillColor: '#0066ff',
-            fillOpacity: 0.8
+            color: '#2563eb',
+            fillColor: '#2563eb',
+            fillOpacity: 0.9
         }).addTo(map)
           .bindPopup('<b>Tu ubicación</b>');
+
     </script>
+
 </body>
 </html>
