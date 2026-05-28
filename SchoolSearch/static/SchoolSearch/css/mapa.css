@@ -9,7 +9,8 @@ body{
 
 .contenido{
     width:66.66%;
-    padding:40;
+    padding:40px;
+    overflow-y: auto;
 }
 
 .mapa-contenedor{

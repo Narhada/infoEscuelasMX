@@ -107,7 +107,10 @@ def seleccion_view(request):
                 request,
                 "SchoolSearch/resumen.html",
                 {
-                    "escuelas": resultados[:n]
+                    "escuelas": resultados[:n],
+		    "lat_usuario": lat_usuario,
+		    "lon_usuario": lon_usuario,
+
                 }
             )
 
