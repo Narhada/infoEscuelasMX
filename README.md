@@ -21,3 +21,7 @@ El objetivo de **infoEscuelasMX** consiste en proporcionar a padres de familia u
 * Geopy: https://geopy-readthedocs-io.translate.goog/en/stable/?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=tc
 
 ### Arquitectura
+
+Se uso una base de datos de la SEP (Secretaria de Educacion Publica) 
+
+* Base de datos usada: https://www.datos.gob.mx/dataset/catalogo_centros_trabajo_sep/resource/3457e135-e83c-43d3-b721-f7fb93c5280c
