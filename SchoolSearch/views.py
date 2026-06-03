@@ -93,6 +93,7 @@ def seleccion_view(request):
 
                     resultados.append({
                         "nombre": escuela.get("C_NOMBRE"),
+                        "calle": escuela.get("INMUEBLE_C_VIALIDAD_PRINCIPAL"),
                         "lat": lat,
                         "lon": lon,
                         "distancia": round(distancia, 2)
