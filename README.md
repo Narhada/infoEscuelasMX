@@ -7,13 +7,13 @@ Through an intuitive, accessible, and user-friendly interface, educational optio
 ![Testing](image/lista_mapa.png)
 
 
-## Integrantes:
+## Team Members:
 
 * Technology Engineering: Kasandra Cortizo
 * Testing: Carlos Montoya
 * Project Leader: Tonatiuh L. Martínez
 
-## Tecnologias usadas
+## Technologies Used:
 
 ### Backend
 * Python3
@@ -25,10 +25,10 @@ Through an intuitive, accessible, and user-friendly interface, educational optio
 * CSS
 * Leaflet (https://leafletjs.com/)
 
-### Fuente de datos
+### Data Source
 * Database from the Educational Centers Catalog of the Secretaría de Educación Pública (SEP): https://www.datos.gob.mx/dataset/catalogo_centros_trabajo_sep/resource/3457e135-e83c-43d3-b721-f7fb93c5280c
 ---
-## Arquitectura
+## Arquitecture
 
 A database provided by the SEP (Public Education Secretariat) was used, from which information regarding the names and locations of educational institutions was obtained.
 
