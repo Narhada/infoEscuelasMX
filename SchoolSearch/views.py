@@ -1,9 +1,12 @@
+
+## KASANDRA :))
 from django.shortcuts import render
 from .forms import EstadoNivelForm
 import json
 import math
 from pathlib import Path
 from django.conf import settings
+
 
 #calcula la ditsnacia sobre la esfera terrestre
 # lat1 y lon1 ubi del usuario --- lat2 y lon2 ubi escuela
