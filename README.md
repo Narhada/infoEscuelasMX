@@ -40,23 +40,19 @@ As a result, a list of educational institutions is displayed, including the name
 
 ## Installation and Execution
 
-1. Clone the repository:
-   git clone <https://github.com/Narhada/infoEscuelasMX.git>
+1. The repository should be cloned:
+   git clone https://github.com/Narhada/infoEscuelasMX.git
 
-2. Create a virtual environment:
+2. A virtual environment should be created:
    python -m venv venv
 
-3. Activate the environment:
+3. The virtual environment should be activated:
    source venv/bin/activate
 
-4. Install dependencies:
+4. The project dependencies should be installed:
    pip install -r requirements.txt
 
-5. Download the SEP Educational Centers dataset (CSV format) from: https://www.datos.gob.mx/dataset/catalogo_centros_trabajo_sep/resource/3457e135-e83c-43d3-b721-f7fb93c5280c
+5. The database username and password should be updated in the views.py file.
+   The server should be started:
 
-6. Use the convertir.py script included in the repository to convert the CSV file into JSON format
-
-7. Place the generated JSON file inside the data folder. 
-
-8. Run the server:
-   python manage.py runserver
+6. python manage.py runserver

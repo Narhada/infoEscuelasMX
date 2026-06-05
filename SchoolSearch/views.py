@@ -2,10 +2,11 @@
 ## KASANDRA :))
 from django.shortcuts import render
 from .forms import EstadoNivelForm
-import json
 import math
 from pathlib import Path
 from django.conf import settings
+import psycopg2
+import psycopg2.extras
 
 
 #calcula la ditsnacia sobre la esfera terrestre
@@ -28,7 +29,7 @@ def haversine(lat1, lon1, lat2, lon2):
     return R*c
 #regreso la distancia en km
 
-def seleccion_view(request):
+#def seleccion_view(request):
     if request.method == "POST":
         form = EstadoNivelForm(request.POST)
 
@@ -52,78 +53,137 @@ def seleccion_view(request):
             lon_usuario = float(request.POST.get("lon"))
 
             ruta = Path(settings.BASE_DIR) / "data" / "escuelas_mexico.json"
+def seleccion_view(request):
 
+    if request.method == "POST":
 
-            #abro el archivo 
-            with open(ruta, encoding="utf-8") as f:
-                escuelas = json.load(f)
+        form = EstadoNivelForm(request.POST)
 
-            resultados = []
+        if form.is_valid():
 
-            for escuela in escuelas:
+            mapa_niveles = {
+                "preescolar": "PREESCOLAR",
+                "primaria": "PRIMARIA",
+                "secundaria": "SECUNDARIA",
+            }
 
-                nivel_escuela = (
-                    escuela.get("TIPONIVELSUB_C_SERVICION2")
-                    or ""
-                ).strip().upper()
+            nivel_form = form.cleaned_data.get("nivel_educativo")
+            nivel_buscado = mapa_niveles.get(nivel_form)
 
-                if nivel_buscado and nivel_escuela.upper() != nivel_buscado:
-                    continue
+            n = form.cleaned_data.get("numerotop")
 
-                lat = escuela.get("INMUEBLE_LATITUD")
-                lon = escuela.get("INMUEBLE_LONGITUD")
-                #si no son validas las cordenadas salto esa escuela
-                if not lat or not lon:
-                    continue
+            lat_usuario = float(request.POST.get("lat"))
+            lon_usuario = float(request.POST.get("lon"))
 
-                try:
-
-                    lat= float(lat)
-                    lon =float(lon)
-
-                    nivel_form = form.cleaned_data.get("nivel_educativo")
-                    nivel_escuela = (escuela.get("TIPONIVELSUB_C_SERVICION2") or "")
-
-                    if nivel_form and nivel_form.upper() != nivel_escuela.upper():
-                        continue
-
-                    distancia = haversine(
-                        lat_usuario,
-                        lon_usuario,
-                        lat,
-                        lon
-                    )
-
-                    resultados.append({
-                        "nombre": escuela.get("C_NOMBRE"),
-                        "calle": escuela.get("INMUEBLE_C_VIALIDAD_PRINCIPAL"),
-                        "lat": lat,
-                        "lon": lon,
-                        "distancia": round(distancia, 2)
-                    })
-                #la ignoro si algo sale raro
-                except:
-                    continue
-
-            resultados.sort(key=lambda x: x["distancia"])#ordeno
+            resultados = buscar_escuelas(
+                lat_usuario,
+                lon_usuario,
+                nivel_buscado=nivel_buscado,
+                radio_km=10
+            )
 
             return render(
                 request,
                 "SchoolSearch/resumen.html",
                 {
                     "escuelas": resultados[:n],
-		    "lat_usuario": lat_usuario,
-		    "lon_usuario": lon_usuario,
-
+                    "lat_usuario": lat_usuario,
+                    "lon_usuario": lon_usuario,
                 }
             )
 
+        # SI EL FORM NO ES VÁLIDO
+        return render(
+            request,
+            "SchoolSearch/formulario.html",
+            {
+                "form": form,
+                "error": "Formulario inválido"
+            }
+        )
+
+    # GET
     else:
-        form=EstadoNivelForm() #formulario vacio
+        form = EstadoNivelForm()
+
     return render(
         request,
         "SchoolSearch/formulario.html",
         {
-            "form":form
+            "form": form
         }
     )
+
+import psycopg2
+import psycopg2.extras
+
+def buscar_escuelas(lat_usuario, lon_usuario, nivel_buscado=None, radio_km=10):
+    conn = psycopg2.connect(
+        host="127.0.0.1",
+        dbname="escuelas_sep_sql",
+        user="user_postgres", #   <---------------------
+        password="insert_password_postgres"# <------------------
+    )
+
+    cur = conn.cursor(
+        cursor_factory=psycopg2.extras.RealDictCursor
+    )
+
+    if nivel_buscado:
+        cur.execute("""
+            SELECT c_nombre,
+                   inmueble_c_vialidad_principal,
+                   inmueble_latitud,
+                   inmueble_longitud
+            FROM escuelas
+            WHERE inmueble_latitud IS NOT NULL
+              AND inmueble_longitud IS NOT NULL
+              AND UPPER(tiponivelsub_c_servicion2)=UPPER(%s)
+        """, (nivel_buscado,))
+    else:
+        cur.execute("""
+            SELECT c_nombre,
+                   inmueble_c_vialidad_principal,
+                   inmueble_latitud,
+                   inmueble_longitud
+            FROM escuelas
+            WHERE inmueble_latitud IS NOT NULL
+              AND inmueble_longitud IS NOT NULL
+        """)
+
+    registros = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    resultados = []
+
+    for escuela in registros:
+
+        try:
+            lat = float(escuela["inmueble_latitud"])
+            lon = float(escuela["inmueble_longitud"])
+        except (TypeError, ValueError):
+            continue
+
+        distancia = haversine(
+            lat_usuario,
+            lon_usuario,
+            lat,
+            lon
+        )
+
+        if distancia > radio_km:
+            continue
+
+        resultados.append({
+            "nombre": escuela["c_nombre"],
+            "calle": escuela["inmueble_c_vialidad_principal"],
+            "lat": lat,
+            "lon": lon,
+            "distancia": round(distancia, 2)
+        })
+
+    resultados.sort(key=lambda x: x["distancia"])
+
+    return resultados
