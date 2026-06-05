@@ -25,7 +25,10 @@ Through an intuitive, accessible, and user-friendly interface, educational optio
 * CSS
 * Leaflet (https://leafletjs.com/)
 
-### Data Source
+### Database
+* PostgresSQL
+
+### Data Source 
 * Database from the Educational Centers Catalog of the Secretaría de Educación Pública (SEP): https://www.datos.gob.mx/dataset/catalogo_centros_trabajo_sep/resource/3457e135-e83c-43d3-b721-f7fb93c5280c
 ---
 ## Arquitecture
