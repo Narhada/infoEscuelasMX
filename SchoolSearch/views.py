@@ -114,8 +114,7 @@ def seleccion_view(request):
         }
     )
 
-import psycopg2
-import psycopg2.extras
+
 
 def buscar_escuelas(lat_usuario, lon_usuario, nivel_buscado=None, radio_km=10):
     conn = psycopg2.connect(
